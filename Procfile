@@ -1,1 +1,1 @@
-web: python CoinFlashWeb.py
+web: python CoinFlashWeb.py runserver 0.0.0.0:5000
