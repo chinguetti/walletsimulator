@@ -1,0 +1,20 @@
+{% extends "base.html"%}
+{% block content %}
+<div class="jumbotron">
+
+  <p>Let see how you performed!!</p>
+  {# Recall that report is a boolean #}
+  {% if report%}
+    <p>Your UserName passed the 3 requirements!</p>
+  {% else %}
+    <p>Oh no! Looks like you had issues with your username!</p>
+    <p>Here are the requirements you failed:</p>
+    <ul>
+      <li>{{denomination}}</li>
+      <li>{{wallet}}</li>
+      <li>{{price}}</li>
+      <li>{{cumtotalcoins}}</li>
+    </ul>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "base.html"%}
+{% block content %}
+<div class="jumbotron">
+<p>xxWelcome to Puppy User Name Check</p>
+<p>Let's see if your User Name is secure!</p>
+<p>Fill out the form below with a User Name that has these restraints</p>
+<ul>
+  <li>Must have an upper case letter somewhere.</li>
+  <li>Must have a lower case letter somewhere.</li>
+  <li>Must have a number at the end.</li>
+</ul>
+
+<form action="{{url_for('report')}}">
+   <label for="denomination">Denomination</label>
+    <input type="text" name="denomination" value="[1, 5, 10, 50, 100, 1000, 5000, 10000]">
+   <label for="wallet">wallet</label>
+    <input type="text" name="wallet" value="[(1,2), (5,2), (10,2), (50,2), (100,2), (1000,2), (5000,2), (10000,2)]">
+   <label for="price">price</label>
+    <input type="text" name="price" value=867>
+
+
+    <input type="submit" value="Submit Form">
+</form>
+
+</div>
+{% endblock %}
