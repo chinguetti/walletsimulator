@@ -1,1 +1,1 @@
-web: gunicorn app:CoinFlashWeb
+web: gunicorn app:app
