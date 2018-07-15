@@ -12,13 +12,14 @@
 
 <form action="{{url_for('report')}}">
    <label for="denomination">Denomination</label>
-    <input type="text" name="denomination" value="[1, 5, 10, 50, 100, 1000, 5000, 10000]">
+    <input type="text" name="denomination" size="100" value="[1, 5, 10, 50, 100, 1000, 5000, 10000]">
+    <br>
    <label for="wallet">wallet</label>
-    <input type="text" name="wallet" value="[(1,2), (5,2), (10,2), (50,2), (100,2), (1000,2), (5000,2), (10000,2)]">
+    <input type="text" name="wallet" size="100"  value="[(1,2), (5,2), (10,2), (50,2), (100,2), (1000,2), (5000,2), (10000,2)]">
+    <br>
    <label for="price">price</label>
     <input type="text" name="price" value=867>
-
-
+    <br>
     <input type="submit" value="Submit Form">
 </form>
 

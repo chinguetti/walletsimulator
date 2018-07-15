@@ -2,6 +2,8 @@ import random
 import math
 from statistics import median
 
+#globallog = []
+globallog2 = []
 
 def make_change(value, coins, best_cost=float("inf")):
     if value == 0:
@@ -26,18 +28,18 @@ def parse():
     value = int(input().replace(".", ""))
     wallet = dict(zip(*[iter(map(int, input().replace(".", "").split()))] * 2))
     cashier = list(map(int, input().replace(".", "").split()))
-    print(value)
-    print(wallet)
-    print(cashier)
+    printx(value)
+    printx(wallet)
+    printx(cashier)
     return value, wallet, cashier
 
 
-def print_output(pay, change, final_wallet):
-    print("pay", " ".join("{:.2f} {}".format(coin / 100, count) for coin, count in pay if count != 0))
-    print("change returned", " ".join("{:.2f} {}".format(coin / 100, count) for coin, count in change if count != 0))
-    print("wallet", " ".join("{:.2f} {}".format(coin / 100, count) for coin, count in final_wallet if count != 0))
+def printx_output(pay, change, final_wallet):
+    printx("pay", " ".join("{:.2f} {}".format(coin / 100, count) for coin, count in pay if count != 0))
+    printx("change returned", " ".join("{:.2f} {}".format(coin / 100, count) for coin, count in change if count != 0))
+    printx("wallet", " ".join("{:.2f} {}".format(coin / 100, count) for coin, count in final_wallet if count != 0))
     totalcoins = sum(count for coin, count in final_wallet if count != 0)
-    print("total coins", totalcoins)
+    printx("total coins", totalcoins)
     return final_wallet, totalcoins
 
 
@@ -78,20 +80,21 @@ def minimize_change(value, wallet, cashier):
 
 
 def simulatespending(denominations,transactions, final_wallet={},inprice=0):
+    del globallog2[:]
     cumtotalcoins = 0
     #inal_wallet = {}
     for i in range(1, transactions + 1):
 
-        print("*****Transaction*****", i)
+        printx("*****Transaction*****", i)
         fin_wallet2 = {}
         totalfunds = 0
         for x in final_wallet:
-            # print(x[0],x[1])
+            # printx(x[0],x[1])
             fin_wallet2[x[0]] = fin_wallet2.get(x[0], 0) + x[1]
             totalfunds += x[0] * x[1]
 
-        # print(fin_wallet2)
-        print("total funds", totalfunds)
+        # printx(fin_wallet2)
+        printx("total funds", totalfunds)
         if inprice != 0:
             price = inprice
         else:
@@ -99,7 +102,7 @@ def simulatespending(denominations,transactions, final_wallet={},inprice=0):
             price = math.floor(max(denominations)**random.random())
 
         # Get mininum currency denomination
-        # print(price)
+        # printx(price)
         if price - price % min(denominations) > 0:
             price = price - price % min(denominations)
         else:
@@ -107,19 +110,19 @@ def simulatespending(denominations,transactions, final_wallet={},inprice=0):
 
         # Make sure price is divisible
 
-        print("price", price)
+        printx("price", price)
 
         if price > totalfunds:
             highestnote = max(denominations)
-            print(f"atm withdrawal {highestnote}")
+            printx(f"atm withdrawal {highestnote}")
             fin_wallet2[max(denominations)] = 1
 
-        final_wallet, totalcoins = print_output(*minimize_change(price,
+        final_wallet, totalcoins = printx_output(*minimize_change(price,
                                                                  fin_wallet2,
                                                                  denominations))
 
         cumtotalcoins += totalcoins
-        print("Average coins", cumtotalcoins / i)
+        printx("Average coins", cumtotalcoins / i)
     return cumtotalcoins / i
 
 
@@ -154,18 +157,18 @@ def GenerateExistingCurrency():
 
 def SimulateTransactions(currencies,transactions):
     for x in currencies:
-        print("*********************************", x[0], "*********************************")
-        print("Denominations ", x[1])
+        printx("*********************************", x[0], "*********************************")
+        printx("Denominations ", x[1])
         x.append(simulatespending(x[1],transactions))
         # x = (x[0],x[1],y)
 
     currencies2 = sorted(currencies, key=lambda x: x[2])
 
     for x in currencies2:
-        print("Currency", f"{x[0]:<15}", end='\t\t')
-        print("Average coins + notes in wallet", f'{x[2]:8.2f}', end='\t\t')
-        print("Denominations", x[1])
-        #print(max(x[1]) / min(x[1]))
+        printx("Currency", f"{x[0]:<15}", end='\t\t')
+        printx("Average coins + notes in wallet", f'{x[2]:8.2f}', end='\t\t')
+        printx("Denominations", x[1])
+        #printx(max(x[1]) / min(x[1]))
 
 
 def GenerateNewCurrency(numcurrencies):
@@ -199,24 +202,28 @@ def GenerateNewCurrency(numcurrencies):
             #         currencyunit = currencyunit - currencyunit%10
             #     elif currencyunit > 5:
             #         currencyunit = currencyunit - currencyunit%5
-            # #print(currencyunit)
+            # #printx(currencyunit)
 
                 if currencyunit / denominations[0] > 20000:
                     break
 
             denominations.append(currencyunit)
             prevcurrencyunit = currencyunit
-        #print(denominations)
+        #printx(denominations)
         cXurrencies.append(["Random " + str(currencies),denominations])
-    #print(cXurrencies)
-    print('\n'.join(map(str, cXurrencies)))
+    #printx(cXurrencies)
+    printx('\n'.join(map(str, cXurrencies)))
     return cXurrencies
 
 
 def buy(price=867,
         wallet=[(1,2), (5,2), (10,2), (50,2), (100,2), (1000,2), (5000,2), (10000,2)],
         denomination=[1, 5, 10, 50, 100, 1000, 5000, 10000]):
+    globallog = ""
     simulatespending(denomination, 1, wallet,price)
+    # printx("end")
+    # printx("end","number 2")
+    # printx("end","number 2","number 3")
 
 
 def generate_base_x_currencies():
@@ -231,41 +238,67 @@ def generate_base_x_currencies():
                 newunit = 1
             else:
                 newunit = prevunit * i
-                #print(cXurrencies[j-1] * i)
+                #printx(cXurrencies[j-1] * i)
                 #cXurrencies.append(["Random " + str(i), cXurrencies[j-1] * i])
 
                 if newunit / denominations[0] > 20000:
                     break
             denominations.append(newunit)
-            #print('\n'.join(map(str, denominations)))
-            #print(newunit)
+            #printx('\n'.join(map(str, denominations)))
+            #printx(newunit)
             prevunit = newunit
 
-        #print(denominations)
+        #printx(denominations)
 
         cXurrencies.append(["Base " + str(i), denominations])
-    print('\n'.join(map(str, cXurrencies)))
+    printx('\n'.join(map(str, cXurrencies)))
     return cXurrencies
 
+
+def printx(*inprintx):
+    #fullprintlist = ""
+    #for printlist in inprintx:
+    #    fullprintlist = fullprintlist + printlist
+
+    #globallog.append("{}".format(inprintx))
+
+    mystringcum = ""
+    for mystring in inprintx:
+        mystringcum = mystringcum + "\t" + str(mystring)
+    globallog2.append(mystringcum)
+
+
+    #globallog.append(fullprintlist)
+    #print("{}".format(inprintx))
+    #print(*inprintx)
 
 def main():
     #listofcurrencies = generate_base_x_currencies()
     #listofcurrencies = GenerateNewCurrency(5)
-    listofcurrencies = GenerateExistingCurrency()
+    #listofcurrencies = GenerateExistingCurrency()
     #calculate_ratio_of_max_to_min_currency(listofcurrencies)
-    SimulateTransactions(listofcurrencies, 100)
-    #buy()
+    #SimulateTransactions(listofcurrencies, 100)
+    buy()
+    # for row in globallog:
+    #     for mystring in eval(row):
+    #         print((mystring),end=' ')
+    #     print("")
+    #     #print(row.split())
+
+
+    for row in globallog2:
+        print(row)
 
 
 def calculate_ratio_of_max_to_min_currency(inCurrencies):
     for currency in inCurrencies:
         #pass
-        print(currency[0], min(currency[1]), max(currency[1]),max(currency[1]) / min(currency[1]))
+        printx(currency[0], min(currency[1]), max(currency[1]),max(currency[1]) / min(currency[1]))
 
 
 if __name__ == "__main__":
-    # print_output(*minimize_wallet(*parse()))
-    # print_output(*minimize_change(*parse())) # use this if the scoring rules are changed
+    # printx_output(*minimize_wallet(*parse()))
+    # printx_output(*minimize_change(*parse())) # use this if the scoring rules are changed
     main()
     #generate_base_x_currencies()
 
@@ -278,5 +311,4 @@ if __name__ == "__main__":
 # must have at least 8 units
 # each unit must be between 2-10 times of hte preceding unit
 # maximum unit must be 500-20000 times size of lowest unit
-
-#TODO base x currency
+#O base x currency

@@ -1,7 +1,7 @@
 # Note we imported request!
 from flask import Flask, render_template, request
 from ast import literal_eval
-from CoinChangeFinder import simulatespending
+from CoinChangeFinder import simulatespending,globallog2
 from CoinChangeFinder import buy
 
 app = Flask(__name__)
@@ -27,8 +27,11 @@ def report():
     #buy(, "[(1,2), (5,2), (10,2), (50,2), (100,2), (1000,2), (5000,2), (10000,2)]", "[1, 5, 10, 50, 100, 1000, 5000, 10000]")
    # buy(price,wallet,denomination)
 
+
+    #rint("heh")
     return render_template('report.html',denomination=denomination,wallet=wallet,price=price,
-                           cumtotalcoins=cumtotalcoins)
+                           cumtotalcoins=cumtotalcoins,globallog=globallog2)
+
 
 if __name__ == '__main__':
     #app.run(debug=True)
