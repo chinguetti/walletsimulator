@@ -2,11 +2,29 @@
 from flask import Flask, render_template, request
 from ast import literal_eval
 from CoinChangeFinder import simulatespending,globallog2
+import sys,os
 from CoinChangeFinder import buy
 
-#This configuration is designed for hiroku online web server deployment
+from waitress import serve
 
-app = Flask(__name__)
+
+
+#To build
+#pyinstaller --onefile --add-data "templates;templates"  windowsapp.py
+
+#To test on local PC
+#http://localhost:8080
+
+#To test if the exe is running standalone on another PC
+#http://192.168.0.17:8080/     where the IP is the other PCs IP address
+
+
+base_dir = '.'
+if hasattr(sys, '_MEIPASS'):
+    base_dir = os.path.join(sys._MEIPASS)
+
+
+app = Flask(__name__,template_folder=os.path.join(base_dir, 'templates'))
 
 @app.route('/')
 def index():
@@ -37,4 +55,17 @@ def report():
 
 if __name__ == '__main__':
     #app.run(debug=True)
-    app.run(debug=True, use_reloader=True)
+    #app.run(host='0.0.0.0', debug=True, use_reloader=True)
+    #import os, sys
+
+    #waitress - serve - -call 'flaskr:create_app'
+    #from waitress import serve
+    #serve(wsgiapp)
+
+    #sys.path.append(os.getcwd())
+
+    #waitress server
+    serve(app,host='0.0.0.0', port=8080)
+
+    #flash default server
+    #app.run(host='0.0.0.0', port=8080, debug=True)
